@@ -2,14 +2,14 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 
-function Login(){
+function Login({ navigation }){
 
     return(
         <View style={styles.container}>
-            <TouchableOpacity style={styles.buttons}>
+            <TouchableOpacity  style={styles.buttons}>
                 <Text style={styles.text}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons}>
+            <TouchableOpacity style={styles.buttons} onPress={()=>navigation.navigate('Login')}>
                 <Text style={styles.text}>Log In</Text>
             </TouchableOpacity>
         </View>
