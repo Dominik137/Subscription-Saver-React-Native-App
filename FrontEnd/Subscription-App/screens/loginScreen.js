@@ -3,12 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 import Header from "../componenets/header";
 
 function LoginScreen({navigation}) {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const login = () => {
        
-        const data = { email: email, password: password };
+        const data = { username: username, password: password };
 
         fetch('http://192.168.86.40:5555/login', {
             method: "POST",
@@ -20,7 +20,7 @@ function LoginScreen({navigation}) {
         .then(response => {
             if (response.ok) {
                 console.log("Login successful");
-                navigation.navigate('Dashboard')
+                navigation.navigate('Dashboard', { user_id: data.user_id })
                 // Handle successful login, e.g., navigate to another screen
             } else {
                 console.error("Login failed");
@@ -38,8 +38,8 @@ function LoginScreen({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholder="ex@gmail.com"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
+                    value={username}
+                    onChangeText={text => setUsername(text)}
                 />
                 <Text style={styles.text}>Enter Password</Text>
                 <TextInput

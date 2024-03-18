@@ -8,7 +8,7 @@ function Dashboard({navigation}) {
             Keyboard.dismiss();
           }}>
             <View style={styles.container}>
-             <DashboardHeader />
+             <DashboardHeader navigation={navigation} />
               <View style={styles.content}>
                 <Text>Yours Subs</Text>
                 <View style={styles.content2}>

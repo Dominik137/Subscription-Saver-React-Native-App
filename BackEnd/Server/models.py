@@ -11,14 +11,12 @@ from services import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = "Users"
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, nullable=False, unique=True)
-    _password_hash = db.Column(db.String)
+    username = db.Column(db.String, nullable=False, unique=True)
+    _password_hash = db.Column(db.String, nullable=False)
 
-    # set  = db.relationship('Set', back_populates='users')
+    subscriptionSet  = db.relationship('SubscriptionSet', back_populates='user')
 
-    # serialize_rules = ('-set',)
-    
-    # serialize_rules = ('-set',)
+    serialize_rules = ('-subscriptionSet',)
 
     @hybrid_property
     def password(self):
@@ -36,3 +34,23 @@ class User(db.Model, SerializerMixin):
     def authenticate(self,password):
         return bcrypt.check_password_hash(self._password_hash,password.encode('utf-8'))
     
+class SubscriptionSet(db.Model, SerializerMixin):
+    __tablename__ = 'SubscriptionSets'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    subscription_id = db.Column(db.Integer, db.ForeignKey('Subscriptions.id'))
+
+    user = db.relationship('User', back_populates='subscriptionSet')
+    subscription = db.relationship('Subscription', back_populates='subscriptionSet')
+
+class Subscription(db.Model, SerializerMixin):
+    __tablename__ = 'Subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    service_name = db.Column(db.String)
+    website_link = db.Column(db.String)
+    cost = db.Column(db.Float)
+    due_date = db.Column(db.String)
+
+    subscriptionSet = db.relationship('SubscriptionSet', back_populates='subscription')
+
+    serialize_rules = ('-subscriptionSet',)

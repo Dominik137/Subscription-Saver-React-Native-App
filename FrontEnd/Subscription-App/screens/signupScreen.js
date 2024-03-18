@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-nativ
 import Header from "../componenets/header";
 
 function SignUpScreen({ navigation }) {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const signUp = () => {
-        const data = { email: email, password: password };
+        const data = { username: username, password: password };
 
         fetch('http://192.168.86.40:5555/create_user', {
             method: "POST",
@@ -20,7 +20,7 @@ function SignUpScreen({ navigation }) {
             if (response.ok) {
                 console.log("User created successfully");
                 // Optionally, you can navigate to another screen after successful signup
-                navigation.navigate('Dashboard');
+                navigation.navigate('Dashboard', { user_id: data.user_id })
             } else {
                 console.error("Signup failed");
                 // Handle signup failure, e.g., display an error message
@@ -37,8 +37,8 @@ function SignUpScreen({ navigation }) {
                 <TextInput
                     style={styles.input}
                     placeholder="ex@gmail.com"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
+                    value={username}
+                    onChangeText={text => setUsername(text)}
                 />
                 <Text style={styles.text}>Enter Password</Text>
                 <TextInput

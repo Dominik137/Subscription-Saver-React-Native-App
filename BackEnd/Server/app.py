@@ -7,10 +7,11 @@ from flask import Flask, request, make_response, jsonify, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
-from models import User
+from models import User, SubscriptionSet, Subscription
 from services import api, app, db, secret_key, bcrypt
 import json
 from datetime import datetime
+
 
 
 # Routes
@@ -23,7 +24,7 @@ def login():
     if request.method == "POST":
         data = request.get_json()
         # print(data)
-        gotten_user = User.query.filter(User.email == data['email']).first()
+        gotten_user = User.query.filter(User.username == data['username']).first()
         if gotten_user:
             if gotten_user.authenticate(data['password']):
                 session["user"] = gotten_user.id
@@ -31,7 +32,7 @@ def login():
             else:
                 return {"Error": "Not valid password"}, 400
         else:
-            return {"Error": "Not valid email"}, 400
+            return {"Error": "Not valid username"}, 400
 
 @app.route('/create_user', methods=["POST"])
 def add_user():
@@ -40,7 +41,7 @@ def add_user():
             json_dict = request.get_json()
             print(json_dict)
             new_user = User(
-                email = json_dict.get("email"),
+                username = json_dict.get("username"),
                 password = json_dict.get("password")
             )
             
@@ -54,6 +55,36 @@ def add_user():
         except Exception as e:
             print(e)
             return make_response({"errors": ["validation errors"]}, 404)
+
+@app.route('/subscriptions/<int:user_id>', methods=['GET'])
+def get_user_subscriptions(user_id):
+    if request.method == 'GET':
+        # Query the Subscription table to find subscriptions associated with the given user ID
+        subscriptions = Subscription.query\
+            .join(SubscriptionSet, SubscriptionSet.subscription_id == Subscription.id)\
+            .filter(SubscriptionSet.user_id == user_id)\
+            .all()
+
+        # If no subscriptions are found, return a 404 error
+        if not subscriptions:
+            return jsonify({'message': 'No subscriptions found for the user.'}), 404
+
+        # Serialize the subscriptions to JSON format
+        serialized_subscriptions = [subscription.to_dict() for subscription in subscriptions]
+
+        # Return the serialized subscriptions
+        return jsonify(serialized_subscriptions), 200
+    
+@app.route('/user/<int:user_id>', methods=["GET"])
+def get_userinfo(user_id):
+    if request.method == 'GET':
+        user = User.query.get(user_id)
+        if user:
+            # Serialize the user object to JSON
+            serialized_user = user.to_dict()
+            return jsonify(serialized_user), 200
+        else:
+            return jsonify({'message': 'User not found'}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5555, debug=True)
