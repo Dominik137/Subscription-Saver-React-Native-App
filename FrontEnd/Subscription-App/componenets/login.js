@@ -6,7 +6,7 @@ function Login({ navigation }){
 
     return(
         <View style={styles.container}>
-            <TouchableOpacity  style={styles.buttons}>
+            <TouchableOpacity  style={styles.buttons} onPress={()=>navigation.navigate('Signup')}>
                 <Text style={styles.text}>Sign Up</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttons} onPress={()=>navigation.navigate('Login')}>
