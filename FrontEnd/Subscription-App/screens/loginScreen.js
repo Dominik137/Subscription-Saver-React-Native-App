@@ -19,13 +19,16 @@ function LoginScreen({navigation}) {
         })
         .then(response => {
             if (response.ok) {
-                console.log("Login successful");
-                navigation.navigate('Dashboard', { user_id: data.user_id })
-                // Handle successful login, e.g., navigate to another screen
+                return response.json(); // Parse the response body as JSON
             } else {
-                console.error("Login failed");
-                // Handle login failure, e.g., display an error message
+                throw new Error("Login failed");
             }
+        })
+        .then(data => {
+            console.log(data); // Now 'data' contains the parsed response body
+            console.log("Login successful");
+            navigation.navigate('Dashboard', { user_id: data.id })
+            // Assuming 'data' now contains the user ID and other user information
         })
         .catch(error => console.error("Error:", error));
     }

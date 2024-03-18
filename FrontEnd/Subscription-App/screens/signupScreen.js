@@ -8,7 +8,7 @@ function SignUpScreen({ navigation }) {
 
     const signUp = () => {
         const data = { username: username, password: password };
-
+    
         fetch('http://192.168.86.40:5555/create_user', {
             method: "POST",
             headers: {
@@ -18,16 +18,19 @@ function SignUpScreen({ navigation }) {
         })
         .then(response => {
             if (response.ok) {
-                console.log("User created successfully");
-                // Optionally, you can navigate to another screen after successful signup
-                navigation.navigate('Dashboard', { user_id: data.user_id })
+                return response.json(); // Parse the response body as JSON
             } else {
-                console.error("Signup failed");
-                // Handle signup failure, e.g., display an error message
+                throw new Error("Signup failed");
             }
         })
+        .then(data => {
+            console.log("User created successfully");
+            console.log(data); // Now 'data' contains the parsed response body
+            // Optionally, you can navigate to another screen after successful signup
+            navigation.navigate('Dashboard', { user_id: data.id })
+        })
         .catch(error => console.error("Error:", error));
-    }
+    };
 
     return (
         <View style={styles.container}>
