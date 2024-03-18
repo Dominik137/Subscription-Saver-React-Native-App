@@ -17,9 +17,12 @@ export default function App() {
     headerShown: false
   }}>
        <Stack.Screen name='Home' component={Home} options={({ navigation }) => ({ navigation })}/>
-       <Stack.Screen name='Login' component={LoginScreen} options={({ navigation }) => ({ navigation })} />
+       <Stack.Screen name='Login' component={LoginScreen} options={({ navigation }) => ({ navigation })}  />
        <Stack.Screen name='Signup' component={SignupScreen} options={({ navigation }) => ({ navigation })} />
-       <Stack.Screen name="Dashboard" component={Dashboard} />
+       <Stack.Screen name="Dashboard" component={Dashboard}  options={({ navigation }) => ({
+    ...navigation,
+    gestureEnabled: false,
+ })}/>
        
       </Stack.Navigator>
     </NavigationContainer>
