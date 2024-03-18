@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import Header from "../componenets/header";
 
 function SignUpScreen({ navigation }) {
@@ -33,6 +33,9 @@ function SignUpScreen({ navigation }) {
     };
 
     return (
+    <TouchableWithoutFeedback onPress={()=>{
+            Keyboard.dismiss();
+          }}>
         <View style={styles.container}>
             <Header />
             <View style={styles.content}>
@@ -58,6 +61,7 @@ function SignUpScreen({ navigation }) {
                 </View>
             </View>
         </View>
+    </TouchableWithoutFeedback>
     );
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Header from "../componenets/header";
 
 function LoginScreen({navigation}) {
@@ -34,6 +34,9 @@ function LoginScreen({navigation}) {
     }
 
     return (
+    <TouchableWithoutFeedback onPress={()=>{
+            Keyboard.dismiss();
+          }}>
         <View style={styles.container}>
             <Header />
             <View style={styles.content}>
@@ -59,6 +62,7 @@ function LoginScreen({navigation}) {
                 </View>
             </View>
         </View>
+    </TouchableWithoutFeedback>
     );
 }
 

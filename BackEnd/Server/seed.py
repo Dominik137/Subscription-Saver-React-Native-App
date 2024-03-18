@@ -16,6 +16,10 @@ with app.app_context():
         User(username='user{}@example.com'.format(i), password='password{}'.format(i)) for i in range(1, 11)
     ]
 
+    # Add Dom user
+    dom_user = User(username='Dom', password='123')
+    users.append(dom_user)
+
     # Add users to session
     db.session.add_all(users)
     db.session.commit()

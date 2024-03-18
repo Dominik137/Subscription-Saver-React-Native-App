@@ -17,6 +17,7 @@ function DashboardHeader({navigation}) {
                 }
                 const data = await response.json();
                 setUsername(data.username);
+                
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -36,7 +37,7 @@ function DashboardHeader({navigation}) {
 
 const styles = StyleSheet.create({
     header: {
-        height: 110,
+        height: 130,
         paddingTop: 68,
         backgroundColor: '#8A9A5B',
         flexDirection: 'row',

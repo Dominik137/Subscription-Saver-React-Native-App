@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, Touchable, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import DashboardHeader from "../componenets/dashboardHeader";
+import DashboardSubs from "../componenets/dashboardSubs";
 
 function Dashboard({navigation}) {
     return (
@@ -10,9 +11,10 @@ function Dashboard({navigation}) {
             <View style={styles.container}>
              <DashboardHeader navigation={navigation} />
               <View style={styles.content}>
-                <Text>Yours Subs</Text>
+                <Text style={styles.text}>Yours Subs</Text>
+                
                 <View style={styles.content2}>
-                  <Text>Something else, need logout button!</Text>
+                  <DashboardSubs />
                 </View>
   
               </View>
@@ -31,17 +33,24 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       paddingTop: 0,
-      paddingHorizontal: 0
+      paddingHorizontal: 0,
       // alignItems: 'center',
       // justifyContent: 'center',
     },
     content: {
       padding: 40,
+      textAlign: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
   
     },
     content2: {
       marginTop: 20
+    },
+    text: {
+      fontSize: 25
     }
+
   });
 
 export default Dashboard;
