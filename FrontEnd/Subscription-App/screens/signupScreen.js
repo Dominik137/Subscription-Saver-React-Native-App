@@ -1,41 +1,74 @@
-import React from "react";
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import Header from "../componenets/header";
 
-function SignupScreen(){
+function SignUpScreen({ navigation }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    return(
+    const signUp = () => {
+        const data = { email: email, password: password };
+
+        fetch('http://192.168.86.40:5555/create_user', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("User created successfully");
+                // Optionally, you can navigate to another screen after successful signup
+                navigation.navigate('Dashboard');
+            } else {
+                console.error("Signup failed");
+                // Handle signup failure, e.g., display an error message
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
+    return (
         <View style={styles.container}>
             <Header />
-                <View style={styles.content}>
-                    <Text style={styles.text}>Enter Email</Text>
-                    <TextInput style={styles.input} placeholder="ex@gmail.com"></TextInput>
-                    <Text style={styles.text}>Enter Password</Text>
-                    <TextInput style={styles.input} placeholder="password"></TextInput>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.login}>Sign up!</Text>
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.content}>
+                <Text style={styles.text}>Enter Email</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="ex@gmail.com"
+                    value={email}
+                    onChangeText={text => setEmail(text)}
+                />
+                <Text style={styles.text}>Enter Password</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="password"
+                    value={password}
+                    onChangeText={text => setPassword(text)}
+                    secureTextEntry={true}
+                />
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={signUp}>
+                        <Text style={styles.login}>Sign Up!</Text>
+                    </TouchableOpacity>
                 </View>
+            </View>
         </View>
-    )
-
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      paddingTop: 0,
-      paddingHorizontal: 0
-      // alignItems: 'center',
-      // justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingTop: 0,
+        paddingHorizontal: 0
     },
     content: {
         flex: 1,
-      padding: 40,
-      alignItems: 'center'
+        padding: 40,
+        alignItems: 'center'
     },
     text: {
         fontSize: 35,
@@ -55,7 +88,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     button: {
-        borderWidth: 3, 
+        borderWidth: 3,
         borderColor: '#8A9A5B',
         borderRadius: 15,
         width: 200,
@@ -63,9 +96,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     login: {
-      textAlign: 'center',
-      fontSize: 20
+        textAlign: 'center',
+        fontSize: 20
     }
-  });
+});
 
-export default SignupScreen
+export default SignUpScreen;

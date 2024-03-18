@@ -40,4 +40,4 @@ app.config['SECRET_KEY'] = secret_key
 # for handeling our cookies and session
 
 api = Api(app)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:8082"}})

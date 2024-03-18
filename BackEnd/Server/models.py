@@ -11,14 +11,14 @@ from services import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = "Users"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique=True)
+    email = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String)
 
-    set  = db.relationship('Set', back_populates='users')
+    # set  = db.relationship('Set', back_populates='users')
 
-    serialize_rules = ('-set',)
+    # serialize_rules = ('-set',)
     
-    serialize_rules = ('-set',)
+    # serialize_rules = ('-set',)
 
     @hybrid_property
     def password(self):
