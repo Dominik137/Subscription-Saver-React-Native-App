@@ -6,6 +6,7 @@ import Home from './screens/home';
 import LoginScreen from './screens/loginScreen';
 import SignupScreen from './screens/signupScreen';
 import Dashboard from './screens/dashboard';
+import AddSub from './screens/addSub';
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
     ...navigation,
     gestureEnabled: false,
  })}/>
+      <Stack.Screen name='AddSub' component={AddSub} options={({ navigation }) => ({ navigation })} />
        
       </Stack.Navigator>
     </NavigationContainer>

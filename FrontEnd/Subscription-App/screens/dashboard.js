@@ -1,25 +1,19 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, Touchable, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native'; // Import ScrollView
 import DashboardHeader from "../componenets/dashboardHeader";
 import DashboardSubs from "../componenets/dashboardSubs";
 
 function Dashboard({navigation}) {
     return (
-        <TouchableWithoutFeedback onPress={()=>{
-            Keyboard.dismiss();
-          }}>
-            <View style={styles.container}>
-             <DashboardHeader navigation={navigation} />
-              <View style={styles.content}>
-                <Text style={styles.text}>Yours Subs</Text>
-                
-                <View style={styles.content2}>
-                  <DashboardSubs />
+        <View style={styles.container}>
+            <DashboardHeader navigation={navigation} />
+            <ScrollView style={styles.scrollContainer}> 
+                <View style={styles.content}>
+                    <Text style={styles.text}>Your Subscriptions</Text>
+                    <DashboardSubs navigation={navigation}/>
                 </View>
-  
-              </View>
-            </View>
-          </TouchableWithoutFeedback>    
+            </ScrollView>
+        </View>
     );
 }
 
@@ -27,30 +21,23 @@ Dashboard.navigationOptions = {
     gestureEnabled: false // Disable swipe back gesture
 };
 
-
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      paddingTop: 0,
-      paddingHorizontal: 0,
-      // alignItems: 'center',
-      // justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    scrollContainer: {
+        flex: 1,
+        paddingHorizontal: 20,
     },
     content: {
-      padding: 40,
-      textAlign: 'center',
-      alignItems: 'center',
-      justifyContent: 'center',
-  
-    },
-    content2: {
-      marginTop: 20
+        marginTop: 20,
     },
     text: {
-      fontSize: 25
+        fontSize: 25,
+        marginTop: 20,
+        textAlign: 'center',
     }
-
-  });
+});
 
 export default Dashboard;
