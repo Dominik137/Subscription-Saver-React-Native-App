@@ -1,63 +1,109 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
+import dayjs from 'dayjs';
 
-function DashboardSubs({navigation}){
+function DashboardSubs({ navigation }) {
 
     const [subscriptions, setSubscriptions] = useState([])
     const route = useRoute();
     const { user_id } = route.params;
 
-    useEffect(() => {
-        const fetchSubscriptions = async () => {
-            try {
-                const response = await fetch(`http://192.168.86.40:5555/subscriptions/${user_id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user subscriptions');
-                }
-                const data = await response.json();
-                setSubscriptions(data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
+    const fetchSubscriptions = async () => {
+        try {
+            const response = await fetch(`http://192.168.86.40:5555/subscriptions/${user_id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch user subscriptions');
             }
+            const data = await response.json();
+            setSubscriptions(data);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSubscriptions();
+    }, []); // Fetch subscriptions on component mount
+
+    // Add a dependency on subscriptions so that useEffect is called whenever subscriptions change
+    useEffect(() => {
+        // Define a function to fetch subscriptions again when a new subscription is created
+        const handleNewSubscription = () => {
+            fetchSubscriptions();
         };
 
-        fetchSubscriptions(); 
-    }, []); 
+        // Listen for navigation focus events to refetch subscriptions
+        const unsubscribe = navigation.addListener('focus', handleNewSubscription);
 
-    const renderItem = ({ item }) => (
-        <View style={styles.card}>
-            <Text style={styles.item}>{`${item.service_name}: 
-Cost: ${item.cost}
+        // Clean up the subscription when the component unmounts
+        return unsubscribe;
+    }, [navigation, subscriptions]); // Dependency on navigation and subscriptions
+
+
+    const deleteSub = async (id) => {
+        try {
+            const response = await fetch(`http://192.168.86.40:5555/handle_subscription/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete subscription');
+            }
+    
+            // Filter out the deleted subscription from the subscriptions state
+            setSubscriptions((prevSubscriptions) =>
+                prevSubscriptions.filter((subscription) => subscription.id !== id)
+            );
+        } catch (error) {
+            console.error('Error deleting subscription:', error);
+        }
+    };
+
+
+    const renderItem = ({ item }) => {
+        
+        const formattedDueDate = dayjs(item.due_date).format('DD');
+        
+        return (
+            <View style={styles.card}>
+                <Text style={styles.item}>{`${item.service_name}: 
+Cost: ${item.cost}$
 Link: ${item.website_link} 
-Payment Due: ${item.due_date}`}</Text>
-        </View>
-    );
+Payment Due: ${formattedDueDate}`}</Text>
+                <TouchableOpacity onPress={() => deleteSub(item.id)}><AntDesign name="delete" size={24} color="black" /></TouchableOpacity>
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
-           {subscriptions.length > 0 ? (
-             <FlatList
-               data={subscriptions}
-               renderItem={renderItem}
-               keyExtractor={item => item.id.toString()}
-               contentContainerStyle={styles.listContainer}
-             />
-             
-           ) : (
-             <Text>No Subscriptions!</Text>
-           )}
-           <TouchableOpacity onPress={()=> navigation.navigate('AddSub')} style={styles.addSubButton}><Text style={styles.text}>Add A Subscription!</Text></TouchableOpacity>
+            {subscriptions.length > 0 ? (
+                <FlatList
+                    data={subscriptions}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id.toString()}
+                    contentContainerStyle={styles.listContainer}
+                    
+                />
+            ) : (
+                <Text>No Subscriptions!</Text>
+            )}
+            <TouchableOpacity onPress={() => navigation.navigate('AddSub', { user_id: user_id })} style={styles.addSubButton}><Text style={styles.text}>Add A Subscription!</Text></TouchableOpacity>
         </View>
-       );
+    );
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         backgroundColor: '#fff',
         paddingTop: 40,
-        paddingHorizontal: 20, 
+        paddingHorizontal: 20,
     },
     card: {
         backgroundColor: '#ffffff',
@@ -79,19 +125,19 @@ const styles = StyleSheet.create({
     listContainer: {
         flexGrow: 1,
     },
-    text:{
+    text: {
         fontSize: 20,
         textAlign: 'center',
         padding: 20,
-        
+
     },
     addSubButton: {
         backgroundColor: 'transparent',
-        borderWidth: 1, 
-        borderColor: 'black', 
-        borderRadius: 5, 
-        paddingVertical: 10, 
-        paddingHorizontal: 20, 
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         marginBottom: 40
     },
 });
