@@ -39,7 +39,7 @@ function SignUpScreen({ navigation }) {
         <View style={styles.container}>
             <Header />
             <View style={styles.content}>
-                <Text style={styles.text}>Enter Email</Text>
+                <Text style={styles.text}>Enter Username or Email</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="ex@gmail.com"
