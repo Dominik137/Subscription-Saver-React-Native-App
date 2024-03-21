@@ -17,7 +17,7 @@ function About(){
 
 const styles = StyleSheet.create({
     about: {
-        fontSize: 20,
+        fontSize: 22,
         textAlign: 'center'
     }
 })
