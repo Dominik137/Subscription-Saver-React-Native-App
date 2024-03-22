@@ -6,7 +6,7 @@ function About(){
     return(
         <View>
             <Text style={styles.about}>
-                WWelcome to Subscription Saver! An all in one app to track any subscription you may have. 
+                Welcome to Subscription Saver! An all in one app to track any subscription you may have. 
                 <Text> With Simplicity and ease of use as our forfront we want to bring you the best experince a tracking your subscritptions</Text>
             </Text>
 
