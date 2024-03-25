@@ -5,10 +5,17 @@ import Header from "../componenets/header";
 function SignUpScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     const signUp = () => {
         const data = { username: username, password: password };
-    
+        
+        if (username.length < 3) {
+            setErrorMessage('Username must be longer than 3 characters');
+            return;
+        }
+
         fetch('http://192.168.86.40:5555/create_user', {
             method: "POST",
             headers: {
@@ -39,6 +46,7 @@ function SignUpScreen({ navigation }) {
         <View style={styles.container}>
             <Header />
             <View style={styles.content}>
+            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
                 <Text style={styles.text}>Enter Username or Email</Text>
                 <TextInput
                     style={styles.input}
@@ -105,6 +113,11 @@ const styles = StyleSheet.create({
     login: {
         textAlign: 'center',
         fontSize: 20
+    },
+    error: {
+        color: 'red',
+        textAlign: 'center',
+        marginBottom: 10,
     }
 });
 

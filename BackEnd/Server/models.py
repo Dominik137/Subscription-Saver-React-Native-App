@@ -18,6 +18,13 @@ class User(db.Model, SerializerMixin):
 
     serialize_rules = ('-subscriptionSet',)
 
+    @validates('username')
+    def validates(self, key, value):
+        if len(value) <= 2:
+            raise ValueError('Username must be more then 2 charachters')
+        else:
+            return value
+
     @hybrid_property
     def password(self):
         return self._password_hash
