@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 35,
+        fontSize: 20,
         textAlign: 'center',
         paddingBottom: 20,
         paddingTop: 0
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         width: 200,
         height: 50,
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
     },
     login: {
         textAlign: 'center',

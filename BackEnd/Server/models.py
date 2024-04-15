@@ -57,6 +57,7 @@ class Subscription(db.Model, SerializerMixin):
     website_link = db.Column(db.String)
     cost = db.Column(db.Float)
     due_date = db.Column(db.String)
+    frequency = db.Column(db.String)
 
     subscriptionSet = db.relationship('SubscriptionSet', back_populates='subscription')
 

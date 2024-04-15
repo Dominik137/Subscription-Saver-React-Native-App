@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { View, TextInput, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, ScrollView, TouchableOpacity  } from "react-native";
+import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import AddSubHeader from "../componenets/addSubHeader";
@@ -13,6 +14,7 @@ function AddSub({navigation}){
     const [subName, setSubName] = useState('No Name Given')
     const [website, setWebsite] = useState('No Website Given')
     const [cost, setCost] = useState(0)
+    const [frequency, setFrequency] = useState('No Frequency Selected')
     
     const saveSub = async () => {
         try {
@@ -26,7 +28,8 @@ function AddSub({navigation}){
                     service_name: subName,
                     website_link: website,
                     cost: parseFloat(cost), // Convert cost to float
-                    due_date: date.toISOString() // Convert date to ISO string
+                    due_date: date.toISOString(), // Convert date to ISO string
+                    frequency: frequency
                 })
             });
             
@@ -69,6 +72,17 @@ function AddSub({navigation}){
                     placeholder="www."
                     onChangeText={text => setWebsite(text)}
                 />
+            <Text style={styles.text}>Frequency</Text>
+                <Picker
+            style={styles.input}
+            selectedValue={frequency}
+            onValueChange={(itemValue, itemIndex) => setFrequency(itemValue)}
+        >
+            <Picker.Item label="Daily" value="daily" />
+            <Picker.Item label="Weekly" value="weekly" />
+            <Picker.Item label="Monthly" value="monthly" />
+            <Picker.Item label="Yearly" value="yearly" />
+        </Picker>
             <Text style={styles.text}>Bill Date</Text>
             <View style={styles.calander}>
             <DateTimePicker

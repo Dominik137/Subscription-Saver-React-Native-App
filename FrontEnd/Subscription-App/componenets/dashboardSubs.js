@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
@@ -42,27 +42,44 @@ function DashboardSubs({ navigation }) {
     }, [navigation, subscriptions]); // Dependency on navigation and subscriptions
 
 
-    const deleteSub = async (id) => {
-        try {
-            const response = await fetch(`http://192.168.86.40:5555/handle_subscription/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
     
-            if (!response.ok) {
-                throw new Error('Failed to delete subscription');
+const deleteSub = async (id) => {
+    Alert.alert(
+        'Delete Subscription',
+        'Are you sure you want to delete this subscription?',
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Delete',
+                onPress: async () => {
+                    try {
+                        const response = await fetch(`http://192.168.86.40:5555/handle_subscription/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to delete subscription');
+                        }
+
+                        // Filter out the deleted subscription from the subscriptions state
+                        setSubscriptions((prevSubscriptions) =>
+                            prevSubscriptions.filter((subscription) => subscription.id !== id)
+                        );
+                    } catch (error) {
+                        console.error('Error deleting subscription:', error);
+                    }
+                }
             }
-    
-            // Filter out the deleted subscription from the subscriptions state
-            setSubscriptions((prevSubscriptions) =>
-                prevSubscriptions.filter((subscription) => subscription.id !== id)
-            );
-        } catch (error) {
-            console.error('Error deleting subscription:', error);
-        }
-    };
+        ],
+        { cancelable: false }
+    );
+};
 
 
     const renderItem = ({ item }) => {
@@ -74,7 +91,8 @@ function DashboardSubs({ navigation }) {
                 <Text style={styles.item}>{`${item.service_name}: 
 Cost: ${item.cost}$
 Link: ${item.website_link} 
-Payment Due: ${formattedDueDate}`}</Text>
+Payment Due: ${formattedDueDate}
+Frequency: ${item.frequency}`}</Text>
                 <TouchableOpacity onPress={() => deleteSub(item.id)}><AntDesign name="delete" size={24} color="black" /></TouchableOpacity>
             </View>
         );
@@ -136,7 +154,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 5,
-        paddingVertical: 10,
+        paddingVertical: 5,
         paddingHorizontal: 20,
         marginBottom: 40
     },

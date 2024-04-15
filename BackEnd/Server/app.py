@@ -85,7 +85,8 @@ def subscription_save():
             service_name=subscription_data.get("service_name"),
             website_link=subscription_data.get("website_link"),
             cost=float(subscription_data.get("cost")),  # Convert cost to float
-            due_date=subscription_data.get("due_date")
+            due_date=subscription_data.get("due_date"),
+            frequency=subscription_data.get('frequency')
         )
        
         db.session.add(new_subscription)
