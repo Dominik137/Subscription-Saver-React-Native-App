@@ -104,7 +104,7 @@ def subscription_save():
     else:
         return jsonify({"error": "Method not allowed"}), 405
     
-@app.route('/handle_subscription/<int:id>', methods=["DELETE"])
+@app.route('/handle_subscription/<int:id>', methods=["DELETE", "GET"])
 def handle_subscription(id):
     if request.method == "DELETE":
         subscription = Subscription.query.get(id)
@@ -116,7 +116,21 @@ def handle_subscription(id):
         db.session.commit()
         
         return '', 204
-    
+    elif request.method == "GET":
+        subscription = Subscription.query.get(id)
+        if subscription is None:
+            return jsonify({"error": "Subscription not found"}), 404
+        else:
+            subscription_data = {
+                "id": subscription.id,
+                "service_name": subscription.service_name,
+                "website_link": subscription.website_link,
+                "cost": subscription.cost,
+                "due_date": subscription.due_date,
+                "frequency": subscription.frequency
+                # Add more fields as needed
+            }
+            return jsonify(subscription_data), 200
     
 @app.route('/user/<int:user_id>', methods=["GET"])
 def get_userinfo(user_id):

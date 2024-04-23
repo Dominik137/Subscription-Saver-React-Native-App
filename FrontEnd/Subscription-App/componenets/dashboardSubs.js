@@ -88,6 +88,8 @@ const deleteSub = async (id) => {
         
         return (
             <View style={styles.card}>
+            
+            <TouchableOpacity onPress={() => navigation.navigate('SubScreen', { item_id: item.id })}><Text><AntDesign name="rightcircle" size={24} color="black" /></Text></TouchableOpacity>
                 <Text style={styles.item}>{`${item.service_name}: 
 Cost: ${item.cost}$
 Link: ${item.website_link} 

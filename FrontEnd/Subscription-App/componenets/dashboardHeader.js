@@ -37,7 +37,7 @@ function DashboardHeader({navigation}) {
 
 const styles = StyleSheet.create({
     header: {
-        height: 130,
+        height: 110,
         paddingTop: 68,
         backgroundColor: '#8A9A5B',
         flexDirection: 'row',
