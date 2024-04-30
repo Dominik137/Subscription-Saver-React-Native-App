@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Linking, Alert } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import dayjs from 'dayjs';
@@ -9,6 +9,11 @@ function DashboardSubs({ navigation }) {
     const [subscriptions, setSubscriptions] = useState([])
     const route = useRoute();
     const { user_id } = route.params;
+
+    const openLink = () => {
+        Linking.openURL(item.website_link);
+      };
+    
 
     const fetchSubscriptions = async () => {
         try {
